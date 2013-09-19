@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+  <title>Hesh Apps</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="description" content="Home of Apps ...">
+  <meta name="keywords" content="hesh,apps">
+
+  <!-- Mobile stylesheet -->
+  <style type="text/css" media="handheld">
+body {
+  font-family : "Trebuchet MS", sans-serif;
+  font-size : 13px;
+  background-color : white;
+  color: gray;
+  margin : 0 0 0 0;
+}
+* {
+  visibility : visible;
+  overflow : auto;
+  margin : 0;
+  padding : 0;
+}
+img {
+  display : none;
+}
+  </style>
+
+  <!-- All other media -->
+  <style type="text/css" media="screen">
+body {
+  font-family : "Trebuchet MS", sans-serif;
+  font-size : 13px;
+  background-color : white;
+  margin : 0 0 0 0;
+}
+
+#osc_txt {
+  margin: 0pt auto;
+  display: block;
+  width: 600px;
+  font-size: 64px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #eeeeee;
+  border-top: 3px solid #eeeeee;
+}
+#col_1, #col_2, #col_3, #col_4, #col_5 {
+  text-align: center;
+  padding-top: 6px;
+  font-weight: bold;
+}
+#col_1 {
+  opacity: 1;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: alpha(opacity=100);
+  font-size: 30px;
+}
+#col_2 {
+  opacity: .8;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  font-size: 25px;
+}
+#col_3 {
+  opacity: .6;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+  filter: alpha(opacity=60);
+  font-size: 20px;
+}
+#col_4 {
+  opacity: .4;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+  filter: alpha(opacity=40);
+  font-size: 16px;
+}
+#col_5 {
+  opacity: .2;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+  font-size: 12px;
+}
+
+/* Navigation strip */
+#nav_strip {
+  /*float: right;*/
+  text-align: center;
+  margin-top: 150px;
+  margin-bottom: 20px;
+  color: #bbbbbb;
+}
+#nav_strip a {
+  color: #777777;
+  text-decoration: none;
+}
+#nav_strip a:hover {
+  color: #77aa77;
+  text-decoration: underline;
+}
+
+/* Setlist, control */
+#foot {
+  position: fixed;
+  bottom: 5px;
+  text-align: center;
+  color: #cccccc;
+  width: 100%;
+}
+#setlist a, #control a {
+  color: #777777;
+  text-decoration: none;
+}
+#setlist a:hover, #control a:hover {
+  color: #77aa77;
+  text-decoration: underline;
+}
+img.faint {
+  opacity: 0.25;
+  filter: alpha(opacity=25);
+}
+  </style>
+
+  <script type="text/javascript">
+  //<![CDATA[
+  //]]>
+  </script>
+
+  <script type="text/javascript">
+  //<![CDATA[
+var rd = {val:0, max:0, min:0, step:0, trend:1, itr:0};
+var gr = {val:0, max:0, min:0, step:0, trend:1, itr:0};
+var bl = {val:0, max:0, min:0, step:0, trend:1, itr:0};
+var col_update_timer = 50;
+var color_display = 'dot';
+var player_state = 'play';
+
+function advance_color(clr) {
+  if ((clr.itr == 0) && (clr.trend == 1)) {
+    clr.min = Math.ceil(Math.random() * 50);
+    clr.max = 206 + (Math.ceil(Math.random() * 50));
+    clr.val = clr.min;
+    clr.step = 1;
+  }
+
+  if (clr.trend == 1) {
+    clr.itr ++;
+    if (clr.itr < (clr.max - clr.min)) {
+      clr.val += clr.step;
+    } else {
+      clr.val -= clr.step;
+      clr.trend = 0;
+    }
+  } else {
+    clr.itr --;
+    if (clr.itr > 0) {
+      clr.val -= clr.step;
+    } else {
+      clr.val += clr.step;
+      clr.trend = 1;
+    }
+  }
+}
+
+function random_colorize_job () {
+  var item = document.getElementById ("osc_txt");
+
+  advance_color (rd);
+  advance_color (gr);
+  advance_color (bl);
+
+  item.style.color = "rgb("+rd.val+","+gr.val+","+bl.val+")";
+  if (color_display == 'rgb') {
+    color_str = item.style.color;
+  } else if (color_display == 'dot') {
+    color_str = "&bull; &bull; &bull; &bull;";
+  } else {
+    color_str = "#" + rd.val.toString(16) + gr.val.toString(16) + bl.val.toString(16);
+  }
+
+  col_update_timer--;
+
+  if (col_update_timer == 0) {
+    col_update_timer = 50;
+    document.getElementById ("col_5").innerHTML = document.getElementById ("col_4").innerHTML;
+    document.getElementById ("col_5").style.color = document.getElementById ("col_4").style.color;
+    document.getElementById ("col_4").innerHTML = document.getElementById ("col_3").innerHTML;
+    document.getElementById ("col_4").style.color = document.getElementById ("col_3").style.color;
+    document.getElementById ("col_3").innerHTML = document.getElementById ("col_2").innerHTML;
+    document.getElementById ("col_3").style.color = document.getElementById ("col_2").style.color;
+    document.getElementById ("col_2").innerHTML = document.getElementById ("col_1").innerHTML;
+    document.getElementById ("col_2").style.color = document.getElementById ("col_1").style.color;
+    // document.getElementById ("col_1").innerHTML = item.style.color;
+    document.getElementById ("col_1").innerHTML = color_str;
+    document.getElementById ("col_1").style.color = item.style.color;
+  }
+}
+
+function random_colorize() {
+  if (player_state == 'play') {
+    random_colorize_job();
+  }
+  tmot = setTimeout("random_colorize()",20);
+}
+
+function initialize () {
+  change_display(color_display);
+
+  random_colorize();
+}
+
+function change_display (elem) {
+  color_display = elem;
+  if (color_display == 'rgb') {
+    document.getElementById('rgb_ln').style.fontWeight = 'bold';
+    document.getElementById('hex_ln').style.fontWeight = 'normal';
+    document.getElementById('dot_ln').style.fontWeight = 'normal';
+  } else if (color_display == 'dot') {
+    document.getElementById('rgb_ln').style.fontWeight = 'normal';
+    document.getElementById('hex_ln').style.fontWeight = 'normal';
+    document.getElementById('dot_ln').style.fontWeight = 'bold';
+  } else {
+    document.getElementById('rgb_ln').style.fontWeight = 'normal';
+    document.getElementById('hex_ln').style.fontWeight = 'bold';
+    document.getElementById('dot_ln').style.fontWeight = 'normal';
+  }
+}
+
+function toggle_play () {
+  if (player_state == 'play') {
+    player_state = 'pause';
+    document.getElementById('pp_button').innerHTML = 'Play';
+  } else {
+    player_state = 'play';
+    document.getElementById('pp_button').innerHTML = 'Pause';
+  }
+}
+  //]]>
+  </script>
+</head><body onload="initialize()">
+<div id="nav_strip">
+  <a href="https://plus.google.com/u/0/105520984116791438743/posts" title="Tumblr App for HootSuite">Tumblr</a>
+   &bull; <a href="https://plus.google.com/u/0/114762000736274390276/posts" title="identi.ca App for HootSuite">identi.ca</a>
+</div>
+<div id="osc_txt">
+  heshapps.com
+</div>
+<div id="col_1"></div>
+<div id="col_2"></div>
+<div id="col_3"></div>
+<div id="col_4"></div>
+<div id="col_5"></div>
+<div id="foot">
+  <a href="http://mdtm.pl/WvyCsr" title="Referral">
+    <img class="faint" src="mediatemple-heshapps.com-referral.WvyCsr.qrcode.png">
+  </a>
+  </hr >
+  <div id="control">
+    <a href="javascript:toggle_play()" title="Toggle Play" id="pp_button">Pause</a>
+  </div>
+  <div id="setlist">
+    <a href="javascript:change_display('rgb')" title="Display colors in RGB values" id="rgb_ln"> RGB</a> &bull;
+    <a href="javascript:change_display('hex')" title="Display colors in Hex values" id="hex_ln"> Hex</a> &bull;
+    <a href="javascript:change_display('dot')" title="Display colored dots" id="dot_ln"> Dots</a>
+  </div>
+</div>
+</body>
+</html>
+
+
